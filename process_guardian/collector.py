@@ -5,6 +5,7 @@ from typing import Any, Dict, Union
 
 import psutil
 
+from process_guardian.tracer import collect_strace
 from process_guardian.utils import utc_time_str
 
 
@@ -122,6 +123,8 @@ def collector(
     pid: int,
     base_dir: Union[str, Path] = "/var/log/process-guardian",
     collect_sys: bool = True,
+    enable_strace: bool = False,
+    strace_duration: int = 5,
 ) -> Path:
     """
     Entrypoint for main.py.
@@ -135,6 +138,13 @@ def collector(
 
     collect_proc_snapshot(pid, incident_dir)
     collect_journal_logs(pid, incident_dir)
+
+    if enable_strace:
+        collect_strace(
+            pid,
+            incident_dir,
+            duration=strace_duration,
+        )
 
     if collect_sys:
         collect_sys_snapshot(incident_dir)

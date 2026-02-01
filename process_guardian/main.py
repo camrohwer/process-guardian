@@ -61,6 +61,8 @@ def main():
     SUSTAINED_BREACH_COUNT = config.get("scan", {}).get(
         "sustained_breach_count", 2
     )
+    STRACE_DURATION = config.get("trace", {}).get("duration_seconds", 5)
+    STRACE_ENABLED = config.get("trace", {}).get("enabled", True)
 
     tracked_offenders: Dict[int, ProcessOffender] = {}
 
@@ -77,7 +79,7 @@ def main():
             for pid, offender in tracked_offenders.items():
                 if offender.breach_count >= SUSTAINED_BREACH_COUNT:
                     print(
-                        f"[{utc_time_str}] "
+                        f"[{utc_time_str()}] "
                         f"Sustained offender detected: PID {pid}, "
                         f"CPU {offender.cpu_percent}%, "
                         f"MEM {offender.memory_percent}%"
@@ -85,9 +87,14 @@ def main():
                     BASE_DIR = config.get("paths", {}).get(
                         "base_incident_dir", "./incident_logs"
                     )
-                    incident_dir = collector(pid, base_dir=BASE_DIR)
+                    incident_dir = collector(
+                        pid,
+                        base_dir=BASE_DIR,
+                        enable_strace=STRACE_ENABLED,
+                        strace_duration=STRACE_DURATION
+                    )
                     print(
-                        f"[{utc_time_str}] "
+                        f"[{utc_time_str()}] "
                         f"Evidence collected at {incident_dir}"
                     )
                     # Reset breach_count to avoid repeated collection

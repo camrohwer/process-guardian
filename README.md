@@ -4,18 +4,29 @@
 
 ## Current Features
 - Scan running processes for **CPU and memory thresholds**
-- Track **sustained offenders** accross multiple scans
+- Track **sustained offenders** across multiple scans
 - Collect **process snapshots** (metadata, CPU/memory usage, threads, open files)
 - Capture **journald** logs for offending processes
 - Take **system snapshots** (`ps`, `top`, `df`, `free`) for context
+- Optional **system call tracing** via `strace` for deeper runtime analysis
 - Configurable thresholds, scan interval, and sustained breach count via `config/config.yaml`
 - Includes **stress test utility** for generating high CPU/memory load (`tools/stress_process.py`)
 
+>**Note:** Tracing and log collection may require evelvation depending on target.
+
 ## Future Enhancements
-- **Tracer** -  monitor system calls vian `strace`
-- **Terminator** - gracefully, force kill, and restart processes
-- **Reporter** - generate alers, summaries, or visualization
-- **Extended automation & CI/CD integration** - testing. monitoring, and deployement pipelines
+- **Terminator**
+  - graceful shutdown
+  - forced termination
+  - optional restart logic
+- **Reporter** 
+  - structured summaries
+  - alerts
+  - visualization or export formats
+- **Extended automation & CI/CD integration** 
+  - automated testing
+  - monitoring validation
+  - deployment workflows
 
 These additions will extend the tool for **deeper systems analysis, automated responses, and reporting workflows.**
 
@@ -52,23 +63,30 @@ Edit `config/config.yaml` to adjust thresholds and scan settings:
 
 ```yaml
 thresholds:
-  cpu_percent: 80
-  memory_percent: 70
+  cpu_percent: 5
+  memory_percent: 10
 
 scan:
   interval_seconds: 5
   sustained_breach_count: 2
+
+paths:
+  base_incident_dir: "./incident_logs"
+
+trace:
+  enabled: true
+  duration_seconds: 5
 ```
 
 ## Usage
 Run the main script:
 ```bash
-python process_guardian/main.py
+python -m process_guardian.main
 ```
 Behaviour:
 - Monitors processes at the configured interval
 - Tracks offenders exceeding thresholds
-Collects evidence (proc snapshot, journal logs, system snapshot)
+- Collects evidence (proc snapshot, journal logs, system snapshot)
 - Stops gracefully on `Ctrl+C`
 
 ## Project Structure
@@ -82,6 +100,7 @@ process-guardian/
 │  ├─ main.py
 │  ├─ scanner.py
 │  ├─ collector.py
+│  ├─ tracer.py
 │  └─ models.py
 ├─ tools/
 │  └─ stress_process.py

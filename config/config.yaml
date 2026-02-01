@@ -8,3 +8,7 @@ scan:
 
 paths:
   base_incident_dir: "./incident_logs"
+
+trace:
+  enabled: true
+  duration_seconds: 5
