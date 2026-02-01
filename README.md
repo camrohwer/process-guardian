@@ -9,6 +9,7 @@
 - Capture **journald** logs for offending processes
 - Take **system snapshots** (`ps`, `top`, `df`, `free`) for context
 - Configurable thresholds, scan interval, and sustained breach count via `config/config.yaml`
+- Includes **stress test utility** for generating high CPU/memory load (`tools/stress_process.py`)
 
 ## Future Enhancements
 - **Tracer** -  monitor system calls vian `strace`
@@ -31,6 +32,21 @@ pip install -r requirements-dev.txt
 pre-commit install
 ```
 
+## Development & Code Quality
+This project uses **pre-commit hooks** to enforce code quality automatically.
+- `Black` - code formatting
+- `isort` - import sorting
+- `flake8` - linting
+- `mypy` - static type checking
+
+```bash
+# Install pre-commit hooks
+pre-commit install
+
+# Run hooks on all files (optional)
+pre-commit run --all-files
+```
+
 ## Configuration
 Edit `config/config.yaml` to adjust thresholds and scan settings:
 
@@ -47,7 +63,7 @@ scan:
 ## Usage
 Run the main script:
 ```bash
-python src/main.py
+python process_guardian/main.py
 ```
 Behaviour:
 - Monitors processes at the configured interval
@@ -61,12 +77,14 @@ Collects evidence (proc snapshot, journal logs, system snapshot)
 process-guardian/
 ├─ config/
 │  └─ config.yaml
-├─ src/
+├─ process_guardian/
 │  ├─ __init__.py
 │  ├─ main.py
 │  ├─ scanner.py
 │  ├─ collector.py
 │  └─ models.py
+├─ tools/
+│  └─ stress_process.py
 ├─ tests/
 ├─ .gitignore
 ├─ .pre=commit-config.yaml
