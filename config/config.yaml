@@ -1,0 +1,10 @@
+thresholds:
+  cpu_percent: 5
+  memory_percent: 10
+
+scan:
+  interval_seconds: 5
+  sustained_breach_count: 2
+
+paths:
+  base_incident_dir: "./incident_logs"
