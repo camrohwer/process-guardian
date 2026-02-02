@@ -70,13 +70,10 @@ scan:
   interval_seconds: 5
   sustained_breach_count: 2
 
-paths:
-  base_incident_dir: "./incident_logs"
-
 trace:
   enabled: true
-  duration_seconds: 5
 ```
+> Full configuration is in `config/config.yaml`. The keys above are defaults; additional sections include `paths`, `terminator`, etc.
 
 ## Usage
 Run the main script:
@@ -106,6 +103,11 @@ process-guardian/
 ├─ tools/
 │  └─ stress_process.py
 ├─ tests/
+│  ├─ test_scanner.py
+│  ├─ test_collector.py
+│  ├─ test_terminator.py
+│  ├─ test_tracer.py
+│  ├─ test_utils.py
 ├─ .gitignore
 ├─ .pre=commit-config.yaml
 ├─ README.md
