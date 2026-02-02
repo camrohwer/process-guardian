@@ -18,3 +18,11 @@ terminator:
   force_kill: false
   dry_run: true
   timeout_seconds: 5
+
+  safe_names:
+    - sshd
+    - systemd
+    - bash
+
+  safe_users:
+    - root

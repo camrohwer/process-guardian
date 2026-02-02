@@ -1,7 +1,7 @@
 import json
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import Any, Union
 
 import psutil
 
@@ -47,7 +47,7 @@ def collect_proc_snapshot(pid: int, output_dir: Path) -> None:
     snapshot_file = output_dir / "process_snapshot.json"
     try:
         proc = psutil.Process(pid)
-        snapshot: Dict[str, Any] = {
+        snapshot: dict[str, Any] = {
             "pid": pid,
             "name": proc.name(),
             "username": proc.username(),

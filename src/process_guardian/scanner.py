@@ -1,5 +1,5 @@
 import time
-from typing import Iterable, List, Optional, Set
+from typing import Iterable, Optional
 
 import psutil
 
@@ -30,8 +30,8 @@ def scan_processes(
     cpu_threshold: float,
     mem_threshold: float,
     sample_interval: float = 1.0,
-    excluded_pids: Optional[Set[int]] = None,
-) -> List[ProcessOffender]:
+    excluded_pids: Optional[set[int]] = None,
+) -> list[ProcessOffender]:
     """
     Scan running processes and return those exceeding CPU or memory thresholds.
     """
@@ -54,7 +54,7 @@ def scan_processes(
 
     time.sleep(sample_interval)  # wait for second sample
 
-    offenders: List[ProcessOffender] = []
+    offenders: list[ProcessOffender] = []
 
     # Second phase
     for pid, proc in processes.items():

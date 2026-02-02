@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timezone
-from typing import Set
 
 
 def utc_time_str() -> str:
@@ -8,7 +7,7 @@ def utc_time_str() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
-def default_exclusions() -> Set[int]:
+def default_exclusions() -> set[int]:
     """
     PIDs that never are considered offenders.
     """
@@ -40,7 +39,8 @@ def load_runtime_config(raw: dict) -> dict:
         "terminator_enabled": raw.get("terminator", {}).get("enabled", False),
         "terminator_force": raw.get("terminator", {}).get("force_kill", False),
         "terminator_dry_run": raw.get("terminator", {}).get("dry_run", True),
-        "terminator_timeout": raw.get("terminator", {}).get(
-            "timeout_seconds", 5
-        ),
+        "terminator_timeout": raw.get("terminator", {}).get("timeout_seconds", 5),
+        "terminator_safe_names": set(raw.get("terminator", {}).get("safe_names", [])),
+        "terminator_safe_users": set(raw.get("terminator", {}).get("safe_users", [])),
+        
     }

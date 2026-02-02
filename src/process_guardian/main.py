@@ -10,11 +10,12 @@ from process_guardian.scanner import scan_processes
 from process_guardian.terminator import terminate_process
 from process_guardian.utils import load_runtime_config, utc_time_str
 
-CONFIG_PATH = Path(__file__).parent.parent / "config" / "config.yaml"
+from importlib.resources import files
 
+CONFIG_PATH = files("process_guardian.config") / "default.yaml"
 
 def load_config_file(path: Path = CONFIG_PATH) -> dict[str, Any]:
-    with open(path, "r") as f:
+    with open(path, 'r') as f:
         return yaml.safe_load(f)
 
 
@@ -95,6 +96,8 @@ def main():
                             force=cfg["terminator_force"],
                             timeout=cfg["terminator_timeout"],
                             dry_run=cfg["terminator_dry_run"],
+                            safe_names=cfg["terminator_safe_names"],
+                            safe_users=cfg["terminator_safe_users"],
                         )
                         if not terminated:
                             print(

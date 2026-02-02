@@ -2,15 +2,14 @@ import psutil
 
 from process_guardian.utils import default_exclusions
 
-SAFE_NAMES = {"sshd", "systemd", "bash"}
-SAFE_USERS = {"root"}
-
-
 def terminate_process(
     pid: int,
+    *,
     force: bool = False,
     timeout: int = 5,
     dry_run: bool = True,
+    safe_names: set[str],
+    safe_users: set[str],
 ) -> bool:
     """
     Attempt to terminate a process gracefully.
@@ -24,7 +23,7 @@ def terminate_process(
         proc = psutil.Process(pid)
 
         # Skip safe processes
-        if proc.name() in SAFE_NAMES or proc.username() in SAFE_USERS:
+        if proc.name() in safe_names or proc.username() in safe_users:
             if dry_run:
                 print(
                     f"[DRY RUN] Skipping safe process PID {pid}: {proc.name()}"
