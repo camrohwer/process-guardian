@@ -1,22 +1,10 @@
-import os
 import time
 from typing import Iterable, List, Optional, Set
 
 import psutil
 
 from process_guardian.models import ProcessOffender
-from process_guardian.utils import utc_time_str
-
-
-def _default_exclusions() -> Set[int]:
-    """
-    PIDs that never are considered offenders.
-    """
-    return {
-        0,  # kernel
-        1,  # systemd / init
-        os.getpid(),  # this proc
-    }
+from process_guardian.utils import default_exclusions, utc_time_str
 
 
 def _iter_processes() -> Iterable[psutil.Process]:
@@ -48,7 +36,7 @@ def scan_processes(
     Scan running processes and return those exceeding CPU or memory thresholds.
     """
     if excluded_pids is None:
-        excluded_pids = _default_exclusions()
+        excluded_pids = default_exclusions()
 
     processes: dict[int, psutil.Process] = {}
 
@@ -72,7 +60,10 @@ def scan_processes(
     for pid, proc in processes.items():
         try:
             cpu = proc.cpu_percent(interval=None)
-            mem = proc.memory_percent()
+            try:
+                mem = proc.memory_percent()
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                mem = 0.0
 
             if cpu < cpu_threshold and mem < mem_threshold:
                 continue

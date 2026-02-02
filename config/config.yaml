@@ -12,3 +12,9 @@ paths:
 trace:
   enabled: true
   duration_seconds: 5
+
+terminator:
+  enabled: true
+  force_kill: false
+  dry_run: true
+  timeout_seconds: 5

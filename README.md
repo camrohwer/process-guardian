@@ -9,16 +9,16 @@
 - Capture **journald** logs for offending processes
 - Take **system snapshots** (`ps`, `top`, `df`, `free`) for context
 - Optional **system call tracing** via `strace` for deeper runtime analysis
+- **Process termination support** for sustained offender processes:
+  - Graceful shutdown via `SIGTERM`
+  - Optional forced termination via `SIGKILL`
+  - Configurable timeouts and **dry-run mode** for safe testing
 - Configurable thresholds, scan interval, and sustained breach count via `config/config.yaml`
 - Includes **stress test utility** for generating high CPU/memory load (`tools/stress_process.py`)
 
 >**Note:** Tracing and log collection may require evelvation depending on target.
 
 ## Future Enhancements
-- **Terminator**
-  - graceful shutdown
-  - forced termination
-  - optional restart logic
 - **Reporter** 
   - structured summaries
   - alerts
@@ -100,6 +100,7 @@ process-guardian/
 │  ├─ main.py
 │  ├─ scanner.py
 │  ├─ collector.py
+│  ├─ terminator.py
 │  ├─ tracer.py
 │  └─ models.py
 ├─ tools/
